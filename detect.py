@@ -15,7 +15,7 @@ model = AutoModelForZeroShotObjectDetection.from_pretrained(MODEL_ID).to(device)
 
 # 3. Load the image and write what we are looking for
 image = Image.open("images/cats.jpg").convert("RGB")
-text = "a sofa. a cat ear."   # lowercase, each object ends with a dot
+text = "a cat. a remote control."   # lowercase, each object ends with a dot
 
 # 4. Prepare the inputs and run the model
 inputs = processor(images=image, text=text, return_tensors="pt").to(device)
@@ -26,7 +26,7 @@ with torch.no_grad():               # no training, only prediction
 results = processor.post_process_grounded_object_detection(
     outputs,
     inputs.input_ids,
-    threshold=0.3,         # how sure the model must be about the box
+    threshold=0.4,         # how sure the model must be about the box
     text_threshold=0.3,    # how sure it must be about the label
     target_sizes=[image.size[::-1]],  # (height, width) of the original image
 )[0]

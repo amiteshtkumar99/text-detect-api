@@ -35,6 +35,7 @@ for i in range(args.runs):
     response.raise_for_status()                          # stop if the server answered with an error
 
 result = response.json()                                 # JSON text -> Python dictionary
+print("Server timings:", result.get("timings_ms"))
 
 # 3. Use the answer: like a robot choosing what to pick
 print(f"\nFound {result['count']} objects:")

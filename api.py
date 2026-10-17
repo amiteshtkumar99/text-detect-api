@@ -12,7 +12,7 @@ from detector import TextDetector, draw_detections
 app = FastAPI(title="Text-Prompted Object Detection API")
 
 # The model is loaded ONCE when the server starts, not for every request
-detector = TextDetector()
+detector = TextDetector(fp16=True)  # use fp16 on GPU for speed and lower memory usage
 
 
 def read_image(upload: UploadFile) -> Image.Image:
@@ -38,7 +38,7 @@ def detect(
     """Returns the detections as JSON."""
     pil_image = read_image(image)
     detections = detector.detect(pil_image, prompt, box_threshold=threshold)
-    return {"prompt": prompt, "count": len(detections), "detections": detections}
+    return {"prompt": prompt, "count": len(detections), "detections": detections, "timings_ms": detector.last_timings}
 
 
 @app.post("/detect/image")
